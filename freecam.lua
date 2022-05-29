@@ -97,6 +97,30 @@ local fovSpring = Spring.new(FOV_STIFFNESS, 0)
 
 ------------------------------------------------------------------------
 
+local Freecam = Instance.new("ScreenGui")
+local Status = Instance.new("TextLabel")
+
+Freecam.Name = "Freecam"
+Freecam.Parent = game:GetService("CoreGui")
+Freecam.Enabled = false
+Freecam.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Status.Name = "Status"
+Status.Parent = Freecam
+Status.AnchorPoint = Vector2.new(0, 1)
+Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Status.BackgroundTransparency = 1.000
+Status.Position = UDim2.new(0.00999999978, 0, 0.99000001, 0)
+Status.Size = UDim2.new(0, 400, 0, 25)
+Status.Font = Enum.Font.RobotoMono
+Status.Text = "Freecam Enabled - RightShift to enable/disable."
+Status.TextColor3 = Color3.fromRGB(255, 255, 255)
+Status.TextScaled = true
+Status.TextStrokeTransparency = 0.750
+Status.TextWrapped = true
+
+------------------------------------------------------------------------
+
 local Input = {} do
 	local thumbstickCurve do
 		local K_CURVATURE = 2.0
@@ -412,6 +436,7 @@ end
 
 local function StartFreecam()
 	local cameraCFrame = Camera.CFrame
+	Freecam.Enabled = true
 	cameraRot = Vector2.new(cameraCFrame:toEulerAnglesYXZ())
 	cameraPos = cameraCFrame.p
 	cameraFov = Camera.FieldOfView
@@ -426,6 +451,7 @@ local function StartFreecam()
 end
 
 local function StopFreecam()
+	Freecam.Enabled = false
 	Input.StopCapture()
 	RunService:UnbindFromRenderStep("Freecam")
 	PlayerState.Pop()
