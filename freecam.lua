@@ -37,7 +37,7 @@ end)
 
 local TOGGLE_INPUT_PRIORITY = Enum.ContextActionPriority.Low.Value
 local INPUT_PRIORITY = Enum.ContextActionPriority.High.Value
-local FREECAM_MACRO_KB = {Enum.KeyCode.LeftShift, Enum.KeyCode.L}
+local FREECAM_MACRO_KB = {Enum.KeyCode.L}
 
 local NAV_GAIN = Vector3.new(1, 1, 1)*64
 local PAN_GAIN = Vector2.new(0.75, 1)*8
@@ -46,7 +46,7 @@ local FOV_GAIN = 300
 local PITCH_LIMIT = rad(90)
 
 local VEL_STIFFNESS = 1.5
-local PAN_STIFFNESS = 1.0
+local PAN_STIFFNESS = 2
 local FOV_STIFFNESS = 4.0
 
 ------------------------------------------------------------------------
@@ -97,27 +97,29 @@ local fovSpring = Spring.new(FOV_STIFFNESS, 0)
 
 ------------------------------------------------------------------------
 
-local Freecam = Instance.new("ScreenGui")
-local Status = Instance.new("TextLabel")
+pcall(function()
+	Freecam = Instance.new("ScreenGui")
+	local Status = Instance.new("TextLabel")
 
-Freecam.Name = "Freecam"
-Freecam.Parent = game:GetService("CoreGui")
-Freecam.Enabled = false
-Freecam.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	Freecam.Name = "Freecam"
+	Freecam.Parent = game:GetService("CoreGui")
+	Freecam.Enabled = false
+	Freecam.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-Status.Name = "Status"
-Status.Parent = Freecam
-Status.AnchorPoint = Vector2.new(0, 1)
-Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Status.BackgroundTransparency = 1.000
-Status.Position = UDim2.new(0.00999999978, 0, 0.99000001, 0)
-Status.Size = UDim2.new(0, 400, 0, 25)
-Status.Font = Enum.Font.RobotoMono
-Status.Text = "Freecam Enabled - RightShift to enable/disable."
-Status.TextColor3 = Color3.fromRGB(255, 255, 255)
-Status.TextScaled = true
-Status.TextStrokeTransparency = 0.750
-Status.TextWrapped = true
+	Status.Name = "Status"
+	Status.Parent = Freecam
+	Status.AnchorPoint = Vector2.new(0, 1)
+	Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Status.BackgroundTransparency = 1.000
+	Status.Position = UDim2.new(0.00999999978, 0, 0.99000001, 0)
+	Status.Size = UDim2.new(0, 400, 0, 25)
+	Status.Font = Enum.Font.RobotoMono
+	Status.Text = "Freecam Enabled - Press L to enable/disable."
+	Status.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Status.TextScaled = true
+	Status.TextStrokeTransparency = 0.750
+	Status.TextWrapped = true
+end)
 
 ------------------------------------------------------------------------
 
@@ -436,7 +438,10 @@ end
 
 local function StartFreecam()
 	local cameraCFrame = Camera.CFrame
-	Freecam.Enabled = true
+	pcall(function()
+		Freecam.Enabled = true
+	end)
+	
 	cameraRot = Vector2.new(cameraCFrame:toEulerAnglesYXZ())
 	cameraPos = cameraCFrame.p
 	cameraFov = Camera.FieldOfView
@@ -451,7 +456,9 @@ local function StartFreecam()
 end
 
 local function StopFreecam()
-	Freecam.Enabled = false
+	pcall(function()
+		Freecam.Enabled = false
+	end)
 	Input.StopCapture()
 	RunService:UnbindFromRenderStep("Freecam")
 	PlayerState.Pop()
