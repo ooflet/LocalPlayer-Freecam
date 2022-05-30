@@ -37,7 +37,7 @@ end)
 
 local TOGGLE_INPUT_PRIORITY = Enum.ContextActionPriority.Low.Value
 local INPUT_PRIORITY = Enum.ContextActionPriority.High.Value
-local FREECAM_MACRO_KB = {Enum.KeyCode.L}
+local FREECAM_MACRO_KB = {Enum.KeyCode.LeftShift, Enum.KeyCode.L}
 
 local NAV_GAIN = Vector3.new(1, 1, 1)*64
 local PAN_GAIN = Vector2.new(0.75, 1)*8
@@ -46,7 +46,7 @@ local FOV_GAIN = 300
 local PITCH_LIMIT = rad(90)
 
 local VEL_STIFFNESS = 1.5
-local PAN_STIFFNESS = 2
+local PAN_STIFFNESS = 1.0
 local FOV_STIFFNESS = 4.0
 
 ------------------------------------------------------------------------
@@ -97,29 +97,226 @@ local fovSpring = Spring.new(FOV_STIFFNESS, 0)
 
 ------------------------------------------------------------------------
 
-pcall(function()
-	Freecam = Instance.new("ScreenGui")
-	local Status = Instance.new("TextLabel")
+-- Gui to Lua
+-- Version: 3.2
 
-	Freecam.Name = "Freecam"
-	Freecam.Parent = game:GetService("CoreGui")
-	Freecam.Enabled = false
-	Freecam.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+-- Instances:
 
-	Status.Name = "Status"
-	Status.Parent = Freecam
-	Status.AnchorPoint = Vector2.new(0, 1)
-	Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Status.BackgroundTransparency = 1.000
-	Status.Position = UDim2.new(0.00999999978, 0, 0.99000001, 0)
-	Status.Size = UDim2.new(0, 400, 0, 25)
-	Status.Font = Enum.Font.RobotoMono
-	Status.Text = "Freecam Enabled - Press L to enable/disable."
-	Status.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Status.TextScaled = true
-	Status.TextStrokeTransparency = 0.750
-	Status.TextWrapped = true
-end)
+local Freecam = Instance.new("ScreenGui")
+local Status = Instance.new("TextLabel")
+local Killaura = Instance.new("Frame")
+local Switch = Instance.new("ImageButton")
+local UICorner = Instance.new("UICorner")
+local Dot = Instance.new("Frame")
+local UICorner_2 = Instance.new("UICorner")
+local UIPadding = Instance.new("UIPadding")
+local TextLabel = Instance.new("TextLabel")
+local Autowin = Instance.new("Frame")
+local Switch_2 = Instance.new("ImageButton")
+local UICorner_3 = Instance.new("UICorner")
+local Dot_2 = Instance.new("Frame")
+local UICorner_4 = Instance.new("UICorner")
+local UIPadding_2 = Instance.new("UIPadding")
+local TextLabel_2 = Instance.new("TextLabel")
+
+--Properties:
+
+Freecam.Name = "Freecam"
+Freecam.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Freecam.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Status.Name = "Status"
+Status.Parent = Freecam
+Status.AnchorPoint = Vector2.new(0, 1)
+Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Status.BackgroundTransparency = 1.000
+Status.Position = UDim2.new(0.00999999978, 0, 0.99000001, 0)
+Status.Size = UDim2.new(0, 400, 0, 25)
+Status.Font = Enum.Font.RobotoMono
+Status.Text = "Freecam Enabled. Press L to open/close"
+Status.TextColor3 = Color3.fromRGB(255, 255, 255)
+Status.TextSize = 18.000
+Status.TextStrokeTransparency = 0.750
+Status.TextWrapped = true
+Status.TextXAlignment = Enum.TextXAlignment.Left
+
+Killaura.Name = "Killaura"
+Killaura.Parent = Freecam
+Killaura.AnchorPoint = Vector2.new(1, 0)
+Killaura.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Killaura.BackgroundTransparency = 1.000
+Killaura.Position = UDim2.new(0.949999988, 0, 0.150000006, 0)
+Killaura.Size = UDim2.new(0, 250, 0, 35)
+
+Switch.Name = "Switch"
+Switch.Parent = Killaura
+Switch.Active = false
+Switch.AnchorPoint = Vector2.new(1, 0)
+Switch.BackgroundColor3 = Color3.fromRGB(138, 138, 138)
+Switch.Position = UDim2.new(1, 0, 0, 0)
+Switch.Selectable = false
+Switch.Size = UDim2.new(0, 65, 0, 35)
+Switch.AutoButtonColor = false
+
+UICorner.CornerRadius = UDim.new(1, 0)
+UICorner.Parent = Switch
+
+Dot.Name = "Dot"
+Dot.Parent = Switch
+Dot.AnchorPoint = Vector2.new(0.5, 0)
+Dot.BackgroundColor3 = Color3.fromRGB(181, 181, 181)
+Dot.Position = UDim2.new(0.25, 0, 0, 0)
+Dot.Size = UDim2.new(0.5, 0, 1, 0)
+
+UICorner_2.CornerRadius = UDim.new(1, 0)
+UICorner_2.Parent = Dot
+
+UIPadding.Parent = Switch
+UIPadding.PaddingBottom = UDim.new(0.150000006, 0)
+UIPadding.PaddingLeft = UDim.new(0.100000001, 0)
+UIPadding.PaddingRight = UDim.new(0.100000001, 0)
+UIPadding.PaddingTop = UDim.new(0.150000006, 0)
+
+TextLabel.Parent = Killaura
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.Size = UDim2.new(0, 175, 1, 0)
+TextLabel.Font = Enum.Font.RobotoMono
+TextLabel.Text = "Killaura"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 25.000
+TextLabel.TextStrokeTransparency = 0.750
+TextLabel.TextWrapped = true
+
+Autowin.Name = "Autowin"
+Autowin.Parent = Freecam
+Autowin.AnchorPoint = Vector2.new(1, 0)
+Autowin.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Autowin.BackgroundTransparency = 1.000
+Autowin.Position = UDim2.new(0.949999988, 0, 0.25, 0)
+Autowin.Size = UDim2.new(0, 250, 0, 35)
+
+Switch_2.Name = "Switch"
+Switch_2.Parent = Autowin
+Switch_2.Active = false
+Switch_2.AnchorPoint = Vector2.new(1, 0)
+Switch_2.BackgroundColor3 = Color3.fromRGB(138, 138, 138)
+Switch_2.Position = UDim2.new(1, 0, 0, 0)
+Switch_2.Selectable = false
+Switch_2.Size = UDim2.new(0, 65, 0, 35)
+Switch_2.AutoButtonColor = false
+
+UICorner_3.CornerRadius = UDim.new(1, 0)
+UICorner_3.Parent = Switch_2
+
+Dot_2.Name = "Dot"
+Dot_2.Parent = Switch_2
+Dot_2.AnchorPoint = Vector2.new(0.5, 0)
+Dot_2.BackgroundColor3 = Color3.fromRGB(181, 181, 181)
+Dot_2.Position = UDim2.new(0.25, 0, 0, 0)
+Dot_2.Size = UDim2.new(0.5, 0, 1, 0)
+
+UICorner_4.CornerRadius = UDim.new(1, 0)
+UICorner_4.Parent = Dot_2
+
+UIPadding_2.Parent = Switch_2
+UIPadding_2.PaddingBottom = UDim.new(0.150000006, 0)
+UIPadding_2.PaddingLeft = UDim.new(0.100000001, 0)
+UIPadding_2.PaddingRight = UDim.new(0.100000001, 0)
+UIPadding_2.PaddingTop = UDim.new(0.150000006, 0)
+
+TextLabel_2.Parent = Autowin
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.BackgroundTransparency = 1.000
+TextLabel_2.Size = UDim2.new(0, 175, 1, 0)
+TextLabel_2.Font = Enum.Font.RobotoMono
+TextLabel_2.Text = "Autowin"
+TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.TextSize = 25.000
+TextLabel_2.TextStrokeTransparency = 0.750
+TextLabel_2.TextWrapped = true
+
+-- Scripts:
+
+local function KEHT_fake_script() -- Freecam.LocalScript 
+	local script = Instance.new('LocalScript', Freecam)
+
+
+end
+coroutine.wrap(KEHT_fake_script)()
+local function DCHYD_fake_script() -- Switch.LocalScript 
+	local script = Instance.new('LocalScript', Switch)
+
+	local clicked = false
+
+	while clicked do
+		wait()
+		for i,v in pairs(game.Players:GetPlayers()) do
+			game:GetService("ReplicatedStorage").BedWars.RemoteEvent:FireServer("DamagePlayer", game:GetService("Players").LocalPlayer, v)
+		end
+	end
+
+	script.Parent.MouseButton1Click:Connect(function()
+		if clicked == false then
+			script.Parent.Dot:TweenPosition(UDim2.new(0.75,0,0,0), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
+			script.Parent.BackgroundColor3 = Color3.fromRGB(46, 138, 0)
+			script.Parent.Dot.BackgroundColor3 = Color3.fromRGB(85, 255, 0)
+			clicked = true
+
+		elseif clicked == true then
+			script.Parent.Dot:TweenPosition(UDim2.new(0.25,0,0,0), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
+			script.Parent.BackgroundColor3 = Color3.fromRGB(138, 138, 138)
+			script.Parent.Dot.BackgroundColor3 = Color3.fromRGB(181, 181, 181)
+			clicked = false
+		end
+	end)
+end
+coroutine.wrap(DCHYD_fake_script)()
+local function KQMA_fake_script() -- Switch_2.LocalScript 
+	local script = Instance.new('LocalScript', Switch_2)
+
+	local clicked = false
+
+	while clicked do
+		local RunService = game:GetService("RunService")
+		RunService.RenderStepped:Connect(function()
+			game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid"):ChangeState(11)
+		end)
+		for i,v in pairs(workspace:FindFirstChild("Beds", true):GetChildren()) do
+			if not game:GetService("ReplicatedStorage").BedWars.Teams:FindFirstChild(v.Name):FindFirstChild(game.Players.LocalPlayer.Name) then
+				repeat wait()
+					game.Players.LocalPlayer.Character.PrimaryPart.CFrame = v.CFrame + Vector3.new(0,5,0)
+					game:GetService("ReplicatedStorage").BedWars.RemoteEvent:FireServer("DamageBlock", game:GetService("Players").LocalPlayer, v.Position, v)
+				until v.Parent == nil
+			end
+		end
+		local team = game:GetService("ReplicatedStorage").BedWars.Teams:FindFirstChild(game.Players.LocalPlayer.Name, true).Parent
+		for i,v in pairs(game.Players:GetPlayers()) do
+			if not team:FindFirstChild(v.Name) and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
+				repeat wait()
+					game.Players.LocalPlayer.Character.PrimaryPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+					game:GetService("ReplicatedStorage").BedWars.RemoteEvent:FireServer("DamagePlayer", game:GetService("Players").LocalPlayer, v)
+				until not v.Character or not v.Character:FindFirstChild("HumanoidRootPart") or not v.Character:FindFirstChild("Humanoid") or v.Character.Humanoid.Health <= 0 or v.Character.HP.Value <= 0
+			end
+		end
+	end
+
+	script.Parent.MouseButton1Click:Connect(function()
+		if clicked == false then
+			script.Parent.Dot:TweenPosition(UDim2.new(0.75,0,0,0), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
+			script.Parent.BackgroundColor3 = Color3.fromRGB(46, 138, 0)
+			script.Parent.Dot.BackgroundColor3 = Color3.fromRGB(85, 255, 0)
+			clicked = true
+
+		elseif clicked == true then
+			script.Parent.Dot:TweenPosition(UDim2.new(0.25,0,0,0), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
+			script.Parent.BackgroundColor3 = Color3.fromRGB(138, 138, 138)
+			script.Parent.Dot.BackgroundColor3 = Color3.fromRGB(181, 181, 181)
+			clicked = false
+		end
+	end)
+end
+coroutine.wrap(KQMA_fake_script)()
 
 ------------------------------------------------------------------------
 
@@ -438,10 +635,7 @@ end
 
 local function StartFreecam()
 	local cameraCFrame = Camera.CFrame
-	pcall(function()
-		Freecam.Enabled = true
-	end)
-	
+	Freecam.Enabled = true
 	cameraRot = Vector2.new(cameraCFrame:toEulerAnglesYXZ())
 	cameraPos = cameraCFrame.p
 	cameraFov = Camera.FieldOfView
@@ -456,9 +650,7 @@ local function StartFreecam()
 end
 
 local function StopFreecam()
-	pcall(function()
-		Freecam.Enabled = false
-	end)
+	Freecam.Enabled = false
 	Input.StopCapture()
 	RunService:UnbindFromRenderStep("Freecam")
 	PlayerState.Pop()
