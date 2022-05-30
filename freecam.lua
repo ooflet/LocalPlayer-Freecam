@@ -37,7 +37,7 @@ end)
 
 local TOGGLE_INPUT_PRIORITY = Enum.ContextActionPriority.Low.Value
 local INPUT_PRIORITY = Enum.ContextActionPriority.High.Value
-local FREECAM_MACRO_KB = {Enum.KeyCode.LeftShift, Enum.KeyCode.L}
+local FREECAM_MACRO_KB = {Enum.KeyCode.L}
 
 local NAV_GAIN = Vector3.new(1, 1, 1)*64
 local PAN_GAIN = Vector2.new(0.75, 1)*8
@@ -122,8 +122,9 @@ local TextLabel_2 = Instance.new("TextLabel")
 --Properties:
 
 Freecam.Name = "Freecam"
-Freecam.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Freecam.Parent = game:GetService("CoreGui")
 Freecam.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Freecam.Enabled = false
 
 Status.Name = "Status"
 Status.Parent = Freecam
