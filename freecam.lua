@@ -593,9 +593,6 @@ local PlayerState = {} do
 		cameraCFrame = Camera.CFrame
 		cameraFocus = Camera.Focus
 
-		mouseIconEnabled = UserInputService.MouseIconEnabled
-		UserInputService.MouseIconEnabled = false
-
 		mouseBehavior = UserInputService.MouseBehavior
 		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 	end
